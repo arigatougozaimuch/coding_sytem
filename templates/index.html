@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON FLIP // Memory Matching Game</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="glowing-orb blue-orb"></div>
+    <div class="glowing-orb pink-orb"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1 class="glitch-title" data-text="NEON FLIP">NEON FLIP</h1>
+            <p class="subtitle">宇宙のシンボルを揃える記憶力トレーニング</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="game-layout">
+            
+            <!-- Left Side: Controls & Stats -->
+            <aside class="sidebar">
+                <!-- Mode Selector -->
+                <div class="panel controls-panel">
+                    <h3>難易度設定</h3>
+                    <div class="difficulty-selector">
+                        <button class="diff-btn active" data-difficulty="easy">
+                            <i class="fa-solid fa-bolt"></i> EASY (4x4)
+                        </button>
+                        <button class="diff-btn" data-difficulty="medium">
+                            <i class="fa-solid fa-atom"></i> MEDIUM (6x6)
+                        </button>
+                    </div>
+                    <button id="restart-btn" class="action-btn">
+                        <i class="fa-solid fa-rotate-right"></i> 新しいゲームを開始
+                    </button>
+                </div>
+
+                <!-- Stats Panel -->
+                <div class="panel stats-panel">
+                    <h3>現在のステータス</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">経過時間</span>
+                                <span class="stat-value" id="time-val">00:00</span>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon"><i class="fa-solid fa-arrow-pointer"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">ターン数</span>
+                                <span class="stat-value" id="moves-val">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon"><i class="fa-solid fa-shapes"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">マッチ状況</span>
+                                <span class="stat-value" id="matches-val">0/8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Middle: Game Board -->
+            <main class="board-container">
+                <div id="game-board" class="board easy-grid">
+                    <!-- Cards will be dynamically generated here -->
+                </div>
+            </main>
+
+            <!-- Right Side: Leaderboard -->
+            <aside class="sidebar">
+                <div class="panel leaderboard-panel">
+                    <h3>殿堂入り (ランキング)</h3>
+                    
+                    <div class="leaderboard-tabs">
+                        <button class="tab-btn active" data-tab="easy">EASY</button>
+                        <button class="tab-btn" data-tab="medium">MEDIUM</button>
+                    </div>
+
+                    <div class="leaderboard-table-container">
+                        <table id="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%">順位</th>
+                                    <th style="width: 45%">プレイヤー</th>
+                                    <th style="width: 20%">手回数</th>
+                                    <th style="width: 20%">タイム</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Top scores will be rendered here -->
+                                <tr>
+                                    <td colspan="4" class="no-records">スコアを読み込み中...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="victory-modal" class="modal">
+        <div class="modal-content">
+            <div class="victory-icon">🏆</div>
+            <h2>MISSION ACCOMPLISHED</h2>
+            <p>全てのペアを見つけ出しました！</p>
+            
+            <div class="victory-stats">
+                <div class="v-stat">
+                    <span class="v-label">ターン数</span>
+                    <span class="v-value" id="modal-moves">0</span>
+                </div>
+                <div class="v-stat">
+                    <span class="v-label">タイム</span>
+                    <span class="v-value" id="modal-time">00:00</span>
+                </div>
+            </div>
+
+            <form id="score-form" class="score-form">
+                <label for="username">プレイヤー名を記録しよう！</label>
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="名前を入力..." maxlength="15" required>
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> 登録
+                    </button>
+                </div>
+            </form>
+            
+            <button id="modal-close-btn" class="close-btn">閉じる</button>
+        </div>
+    </div>
+
+    <!-- Script Entrypoint -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
